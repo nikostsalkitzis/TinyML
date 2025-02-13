@@ -1,0 +1,18 @@
+cnn.py : code for creating a simple neural network for CIFAR-10
+conversion.py : convert the model from .h5 to .tflite
+model.h : C header file which contains the model as a C array
+model.h5 : model in a format outputted by the cnn.py
+model.tflite : model in .tflite format
+ImageToC : image conversion to c array
+send_to_pico : send the prediction of 100 random images to pico by using delays of 5 seconds
+see_data_from_pico : see what is received by the raspberry pi pico
+quantize_model.py : quantize the model which was previously used
+send_to_pico_plus_quantized : now the idea is that we see both the results of the initial and the quantized model
+see_data_from_pico_plus_quantized : same with the first one but both for the quantized model
+The technology used is uart and to exit the bootsel mode we need to press the button and drag and drop the .uf2 in the pico 
+Also remember to give all the permissions needed sudo chmod 666 /dev/ttyACM0
+When trying to prune my model the error was due to the kind of layers I used 
+##################
+ValueError: `prune_low_magnitude` can only prune an object of the following types: keras.models.Sequential, keras functional model, keras.layers.Layer, list of keras.layers.Layer. You passed an object of type: Conv2D.
+##################
+The initial model has 493 KB and the quantized model has 133KB.
