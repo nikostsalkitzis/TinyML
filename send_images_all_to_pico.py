@@ -31,16 +31,16 @@ input_scale, input_zero_point = input_details_quantized[0]['quantization']
 yolo_model = YOLO("best.pt")
 
 # Define the test folder path
-test_folder = "test/"
+test_folder = "test1/"
 
 # Get a list of all image files in the test folder (limit to 100 images)
-image_files = [f for f in os.listdir(test_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))][:100]
+image_files = [f for f in os.listdir(test_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))][:50]
 
 if not image_files:
-    print("❌ No images found in test folder.")
+    print("No images found in test folder.")
     exit()
 
-print(f"✅ Found {len(image_files)} images in {test_folder} (Processing up to 100)")
+print(f"Found {len(image_files)} images in {test_folder} (Processing up to 100)")
 
 # Loop through the first 100 images in the test folder
 for image_name in image_files:
@@ -52,7 +52,7 @@ for image_name in image_files:
     input_image = cv2.imread(image_path)
 
     if input_image is None:
-        print(f"❌ Error: Could not load {image_name}. Skipping.")
+        print(f"Error: Could not load {image_name}. Skipping.")
         continue
 
     # Resize the image to match TensorFlow Lite expected input size (assuming 32x32)
