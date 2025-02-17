@@ -31,10 +31,10 @@ input_scale, input_zero_point = input_details_quantized[0]['quantization']
 yolo_model = YOLO("best.pt")
 
 # Define the test folder path
-test_folder = "test1/"
+test_folder = "test/"
 
 # Get a list of all image files in the test folder (limit to 100 images)
-image_files = [f for f in os.listdir(test_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))][:50]
+image_files = [f for f in os.listdir(test_folder) if f.lower().endswith(('.png', '.jpg', '.jpeg'))][:100]
 
 if not image_files:
     print("No images found in test folder.")
@@ -46,7 +46,7 @@ print(f"Found {len(image_files)} images in {test_folder} (Processing up to 100)"
 for image_name in image_files:
     image_path = os.path.join(test_folder, image_name)
     
-    print(f"🔄 Processing {image_name}...")
+    print(f"Processing {image_name}...")
     
     # Load and preprocess the image
     input_image = cv2.imread(image_path)
@@ -97,7 +97,12 @@ for image_name in image_files:
     message = f"Original: {predicted_class_original}, Quantized: {predicted_class_quantized}, YOLO: {yolo_top1_class}\n"
     
     # Send predictions to Raspberry Pi Pico
-    ser.write(message.encode())
+    #ser.write(message.encode())
+
+    # Send '1' if predictions match, '0' if they differ
+    match_result = '1' if predicted_class_original == predicted_class_quantized == yolo_top1_class else '0'
+    ser.write(match_result.encode())  # Send single byte
+    ser.flush()  # Ensure data is sent immediately
 
     print(f"Sent predictions for {image_name}: {message.strip()}")
 
